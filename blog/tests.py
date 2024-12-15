@@ -47,15 +47,6 @@ class PostNewViewTest(TestCase):
         # Verify no post was created
         self.assertEqual(Post.objects.count(), 0)
 
-    def test_post_new_requires_login(self):
-        # Test that login is required to access the view
-        self.client.logout()
-        edit_url = reverse('post_edit', kwargs={'pk': self.post.pk})
-        login_url = reverse('login')  # Adjust if your login URL pattern name is different
-        expected_url = f"{login_url}?next={edit_url}"
-        response = self.client.get(edit_url)
-        self.assertRedirects(response, expected_url)
-
 
 
 class PostEditViewTest(TestCase):
@@ -109,12 +100,14 @@ class PostEditViewTest(TestCase):
         response = self.client.get(reverse('post_edit', kwargs={'pk': 999}))
         self.assertEqual(response.status_code, 404)
 
-# NOT WORKING, FIX LATER
-#     def test_post_edit_requires_login(self):
-#         # Test that login is required to access the view
-#         self.client.logout()
-#         response = self.client.get(reverse('post_edit', kwargs={'pk': self.post.pk}))
-#         self.assertRedirects(response, f"/accounts/login/?next=/post_edit/{self.post.pk}/")
+    def test_post_new_requires_login(self):
+        # Test that login is required to access the view
+        self.client.logout()
+        edit_url = reverse('post_edit', kwargs={'pk': self.post.pk})
+        login_url = reverse('login')
+        expected_url = f"{login_url}?next={edit_url}"
+        response = self.client.get(edit_url)
+        self.assertRedirects(response, expected_url)
 
 
 class PostDeleteViewTest(TestCase):
