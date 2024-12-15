@@ -47,12 +47,15 @@ class PostNewViewTest(TestCase):
         # Verify no post was created
         self.assertEqual(Post.objects.count(), 0)
 
-# NOT WORKING, WILL FIX LATER
-#     def test_post_new_requires_login(self):
-#         # Test that login is required to access the view
-#         self.client.logout()
-#         response = self.client.get(reverse('post_new'))
-#         self.assertRedirects(response, "/accounts/login/?next=/post_new/")
+    def test_post_new_requires_login(self):
+        # Test that login is required to access the view
+        self.client.logout()
+        edit_url = reverse('post_edit', kwargs={'pk': self.post.pk})
+        login_url = reverse('login')  # Adjust if your login URL pattern name is different
+        expected_url = f"{login_url}?next={edit_url}"
+        response = self.client.get(edit_url)
+        self.assertRedirects(response, expected_url)
+
 
 
 class PostEditViewTest(TestCase):
