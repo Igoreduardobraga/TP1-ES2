@@ -63,8 +63,8 @@ O PostSphere é um sistema de gerenciamento de postagens que permite aos usuári
 ### Passos para Instalação e Execução:
 1. **Clone o Repositório:**
    ```bash
-   git clone https://github.com/seu-repositorio/blog-django.git
-   cd blog-django
+   git clone https://github.com/Igoreduardobraga/TP1-ES2.git
+   cd TP1-ES2
 
 1. **Crie e Ative o Ambiente Virtual:**
     ```bash
