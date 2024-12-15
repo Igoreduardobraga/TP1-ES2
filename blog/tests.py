@@ -50,7 +50,7 @@ class PostNewViewTest(TestCase):
     def test_post_new_requires_login(self):
         # Test that login is required to access the view
         self.client.logout()
-        new_url = reverse('post_new', kwargs={'pk': self.post.pk})
+        new_url = reverse('post_new')
         login_url = reverse('login')
         expected_url = f"{login_url}?next={new_url}"
         response = self.client.get(new_url)
