@@ -66,20 +66,25 @@ O PostSphere é um sistema de gerenciamento de postagens que permite aos usuári
    cd blog-django
 
 1. **Crie e Ative o Ambiente Virtual:**
+    ```bash
     python -m venv venv
     source venv/bin/activate  # Para Linux/Mac
     venv\Scripts\activate     # Para Windows
     
 1. **Instale as Dependências:**
+   ```bash
     pip install django
 
 
 1. **Configure o Banco de Dados:**
+   ```bash
     python manage.py migrate
 
 
 1. **Crie um Superusuário (Admin):**
+   ```bash
     python manage.py createsuperuser
 
 1. **Inicie o Servidor:**
+   ```bash
     python manage.py runserver
