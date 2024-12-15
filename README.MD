@@ -21,7 +21,7 @@ O PostSphere é um sistema de gerenciamento de postagens que permite aos usuári
    - **Excluir postagens:** Usuários podem remover postagens de forma definitiva, garantindo controle total sobre o conteúdo.
    - **Visualizar uma lista de postagens:** Todas as postagens são exibidas em ordem cronológica reversa, com os itens mais recentes aparecendo primeiro, facilitando a navegação e o acompanhamento do conteúdo.
 
-3. **Página Inicial Dinâmica:**
+3. **Página Inicial:**
    - A página inicial do sistema adapta-se ao status do usuário:
      - **Não autenticado:** Redireciona para a página de login, solicitando credenciais para acessar o sistema.
      - **Autenticado:** Redireciona para a lista de postagens, permitindo acesso direto às funcionalidades disponíveis.
