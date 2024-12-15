@@ -148,3 +148,60 @@ class PostDeleteViewTest(TestCase):
 #         self.client.logout()
 #         response = self.client.get(reverse('post_delete', kwargs={'pk': self.post.pk}))
 #         self.assertRedirects(response, f"/accounts/login/?next=/post_delete/{self.post.pk}/")
+
+
+class PostListViewTest(TestCase):
+    def setUp(self):
+        # Create a user
+        self.user = User.objects.create_user(username='testuser', password='password')
+        # Create multiple posts
+        self.post1 = Post.objects.create(title='Post 1', content='Content 1', author=self.user)
+        self.post2 = Post.objects.create(title='Post 2', content='Content 2', author=self.user)
+        self.post3 = Post.objects.create(title='Post 3', content='Content 3', author=self.user)
+
+    def test_post_list_status_code(self):
+        # Test the status code of the post_list view
+        response = self.client.get(reverse('post_list'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_post_list_template_used(self):
+        # Test that the correct template is used
+        response = self.client.get(reverse('post_list'))
+        self.assertTemplateUsed(response, 'blog/post_list.html')
+
+    def test_post_list_context(self):
+        # Test the context contains the posts ordered by '-created_at'
+        response = self.client.get(reverse('post_list'))
+        self.assertIn('posts', response.context)
+        self.assertEqual(list(response.context['posts']), list(Post.objects.all().order_by('-created_at')))
+
+
+class PostDetailViewTest(TestCase):
+    def setUp(self):
+        # Create a user
+        self.user = User.objects.create_user(username='testuser', password='password')
+        # Create a post
+        self.post = Post.objects.create(title='Post Title', content='Post Content', author=self.user)
+
+    def test_post_detail_status_code(self):
+        # Test the status code of the post_detail view
+        response = self.client.get(reverse('post_detail', kwargs={'pk': self.post.pk}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_post_detail_template_used(self):
+        # Test that the correct template is used
+        response = self.client.get(reverse('post_detail', kwargs={'pk': self.post.pk}))
+        self.assertTemplateUsed(response, 'blog/post_detail.html')
+
+    def test_post_detail_context(self):
+        # Test the context contains the correct post
+        response = self.client.get(reverse('post_detail', kwargs={'pk': self.post.pk}))
+        self.assertIn('post', response.context)
+        self.assertEqual(response.context['post'], self.post)
+
+    def test_post_detail_invalid_post(self):
+        # Test accessing a non-existent post
+        response = self.client.get(reverse('post_detail', kwargs={'pk': 999}))
+        self.assertEqual(response.status_code, 404)
+
+
