@@ -47,6 +47,14 @@ class PostNewViewTest(TestCase):
         # Verify no post was created
         self.assertEqual(Post.objects.count(), 0)
 
+    def test_post_new_requires_login(self):
+        # Test that login is required to access the view
+        self.client.logout()
+        new_url = reverse('post_new', kwargs={'pk': self.post.pk})
+        login_url = reverse('login')
+        expected_url = f"{login_url}?next={new_url}"
+        response = self.client.get(new_url)
+        self.assertRedirects(response, expected_url)
 
 
 class PostEditViewTest(TestCase):
@@ -100,7 +108,7 @@ class PostEditViewTest(TestCase):
         response = self.client.get(reverse('post_edit', kwargs={'pk': 999}))
         self.assertEqual(response.status_code, 404)
 
-    def test_post_new_requires_login(self):
+    def test_post_edit_requires_login(self):
         # Test that login is required to access the view
         self.client.logout()
         edit_url = reverse('post_edit', kwargs={'pk': self.post.pk})
@@ -138,12 +146,14 @@ class PostDeleteViewTest(TestCase):
         response = self.client.post(reverse('post_delete', kwargs={'pk': 999}))
         self.assertEqual(response.status_code, 404)
 
-# NOT WORKING, FIX LATER
-#     def test_post_delete_requires_login(self):
-#         # Test that login is required to access the view
-#         self.client.logout()
-#         response = self.client.get(reverse('post_delete', kwargs={'pk': self.post.pk}))
-#         self.assertRedirects(response, f"/accounts/login/?next=/post_delete/{self.post.pk}/")
+    def test_post_delete_requires_login(self):
+        # Test that login is required to access the view
+        self.client.logout()
+        delete_url = reverse('post_delete', kwargs={'pk': self.post.pk})
+        login_url = reverse('login')
+        expected_url = f"{login_url}?next={delete_url}"
+        response = self.client.get(delete_url)
+        self.assertRedirects(response, expected_url)
 
 
 class PostListViewTest(TestCase):
