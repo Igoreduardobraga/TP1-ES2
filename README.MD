@@ -1,6 +1,7 @@
 # Blog Django
 
 ## 1. Membros do Grupo
+- **Alan Cabral Trindade Prado** 
 - **Igor Eduardo Martins Braga** 
 
 ---
