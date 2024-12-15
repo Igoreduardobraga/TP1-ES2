@@ -76,11 +76,9 @@ O PostSphere é um sistema de gerenciamento de postagens que permite aos usuári
    ```bash
     pip install django
 
-
 1. **Configure o Banco de Dados:**
    ```bash
     python manage.py migrate
-
 
 1. **Crie um Superusuário (Admin):**
    ```bash
