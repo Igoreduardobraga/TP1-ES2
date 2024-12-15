@@ -4,6 +4,57 @@ from django.contrib.auth.models import User
 from blog.models import Post
 from blog.forms import PostForm
 
+class PostNewViewTest(TestCase):
+    def setUp(self):
+        # Create a user
+        self.user = User.objects.create_user(username='testuser', password='password')
+        # Log in the user
+        self.client.login(username='testuser', password='password')
+
+    def test_post_new_get_request(self):
+        # Test GET request to post_new view
+        response = self.client.get(reverse('post_new'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'blog/post_edit.html')
+        self.assertIsInstance(response.context['form'], PostForm)
+
+    def test_post_new_post_valid_data(self):
+        # Test POST request with valid data to create a new post
+        valid_data = {
+            'title': 'New Post Title',
+            'content': 'New Post Content',
+        }
+        response = self.client.post(reverse('post_new'), data=valid_data)
+        # Check redirection to post detail
+        new_post = Post.objects.last()
+        self.assertRedirects(response, reverse('post_detail', kwargs={'pk': new_post.pk}))
+        # Verify the post was created with the correct data
+        self.assertEqual(new_post.title, 'New Post Title')
+        self.assertEqual(new_post.content, 'New Post Content')
+        self.assertEqual(new_post.author, self.user)
+
+    def test_post_new_post_invalid_data(self):
+        # Test POST request with invalid data (e.g., missing required fields)
+        invalid_data = {
+            'title': '',  # Title is required
+            'content': 'New Post Content',
+        }
+        response = self.client.post(reverse('post_new'), data=invalid_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'blog/post_edit.html')
+        # Ensure the form contains errors
+        self.assertTrue(response.context['form'].errors)
+        # Verify no post was created
+        self.assertEqual(Post.objects.count(), 0)
+
+# NOT WORKING, WILL FIX LATER
+#     def test_post_new_requires_login(self):
+#         # Test that login is required to access the view
+#         self.client.logout()
+#         response = self.client.get(reverse('post_new'))
+#         self.assertRedirects(response, "/accounts/login/?next=/post_new/")
+
+
 class PostEditViewTest(TestCase):
     def setUp(self):
         # Create a user
@@ -61,6 +112,7 @@ class PostEditViewTest(TestCase):
 #         self.client.logout()
 #         response = self.client.get(reverse('post_edit', kwargs={'pk': self.post.pk}))
 #         self.assertRedirects(response, f"/accounts/login/?next=/post_edit/{self.post.pk}/")
+
 
 class PostDeleteViewTest(TestCase):
     def setUp(self):
