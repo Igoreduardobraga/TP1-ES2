@@ -1,0 +1,17 @@
+p {
+    margin-right: 20%;
+}
+
+#id_content{
+    width: 100%;
+}
+
+#id_title{
+    width: 100%;
+}
+
+.card {
+    margin: auto;
+    width: fit-content;
+    padding: 0 auto;
+}
