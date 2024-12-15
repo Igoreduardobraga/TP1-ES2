@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <h1>Blog</h1>
+    {% for post in posts %}
+        <article>
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.content|truncatewords:30 }}</p>
+            <small>Por {{ post.author }} em {{ post.created_at }}</small>
+        </article>
+        <hr>
+    {% endfor %}
+</body>
+</html>
