@@ -6,25 +6,50 @@
 </head>
 <body class="bg-light">
     <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <div class="card">
-                    <div class="card-header text-center">
-                        <h2>{{ post.title }}</h2>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">
-                            {{ post.content }}
-                        </p>
-                        <small class="text-muted">Por {{ post.author }} em {{ post.created_at|date:"d/m/Y H:i" }}</small>
-                    </div>
-                    <div class="card-footer text-end">
-                        <a href="{% url 'post_edit' post.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm">Excluir</a>
-                        <a href="{% url 'post_list' %}" class="btn btn-secondary btn-sm">Voltar</a>
-                    </div>
-                </div>
+        <div class="card">
+            <div class="card-header text-center">
+                <h2>{{ post.title }}</h2>
             </div>
+            <div class="card-body">
+                <p class="card-text">
+                    {{ post.content }}
+                </p>
+                <small class="text-muted">Por {{ post.author }} em {{ post.created_at|date:"d/m/Y H:i" }}</small>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{% url 'post_edit' post.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                <a href="{% url 'post_list' %}" class="btn btn-secondary btn-sm">Voltar</a>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <h4>Comentários</h4>
+            {% if comentarios %}
+                {% for comentario in comentarios %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <p class="card-text">{{ comentario.conteudo }}</p>
+                            <small class="text-muted">Por {{ comentario.autor.username }} em {{ comentario.criado_em|date:"d/m/Y H:i" }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Sem comentários ainda.</p>
+            {% endif %}
+        </div>
+
+        <div class="mt-4 mb-5">
+            <h5>Adicionar Comentário</h5>
+            {% if user.is_authenticated %}
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Comentar</button>
+                </form>
+            {% else %}
+                <p>Você precisa <a href="{% url 'login' %}">fazer login</a> para comentar.</p>
+            {% endif %}
         </div>
     </div>
 </body>
