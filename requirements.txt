@@ -1,1 +1,3 @@
 django
+livereload
+django-livereload-server
