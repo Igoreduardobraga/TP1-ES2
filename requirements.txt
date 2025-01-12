@@ -1,3 +1,4 @@
 django
 livereload
 django-livereload-server
+selenium
