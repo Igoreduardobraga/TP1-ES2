@@ -1,11 +1,15 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
+import chromedriver_autoinstaller
+
+chromedriver_autoinstaller.install()
+chrome_options = webdriver.ChromeOptions()
 
 class MyEndToEndTests(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.driver = webdriver.Chrome()
+        cls.driver = webdriver.Chrome(options=chrome_options)
 
     @classmethod
     def tearDownClass(cls):

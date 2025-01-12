@@ -2,3 +2,4 @@ django
 livereload
 django-livereload-server
 selenium
+chromedriver_autoinstaller
