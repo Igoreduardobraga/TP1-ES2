@@ -5,7 +5,7 @@ class MyEndToEndTests(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.driver = webdriver.Firefox()
+        cls.driver = webdriver.Chrome()
 
     @classmethod
     def tearDownClass(cls):
