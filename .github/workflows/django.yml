@@ -28,6 +28,60 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Install Chrome dependencies on Linux
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libappindicator1 fonts-liberation
+        sudo apt-get install -y libnss3 libxss1
+        sudo apt-get install -y libgconf-2-4 libx11-xcb1
+        sudo apt-get install -y libasound2 libxshmfence1
+        sudo apt-get install -y libatk-bridge2.0-0 libcups2
+        sudo apt-get install -y libpangocairo-1.0-0 libgtk-3-0
+
+    - name: Install Chrome on Linux
+      if: runner.os == 'Linux'
+      run: |
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install ./google-chrome-stable_current_amd64.deb
+
+    - name: Install Chrome on Windows
+      if: runner.os == 'Windows'
+      run: |
+        choco install googlechrome --version=91.0.4472.124
+
+    - name: Install Chrome on macOS
+      if: runner.os == 'macOS'
+      run: |
+        brew install --cask google-chrome
+
+    - name: Set up ChromeDriver on Linux
+      if: runner.os == 'Linux'
+      run: |
+        CHROME_VERSION=$(google-chrome --version | cut -d " " -f 3 | cut -d "." -f 1)
+        wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}.0.0/chromedriver_linux64.zip
+        unzip chromedriver_linux64.zip
+        sudo mv chromedriver /usr/local/bin/
+        rm chromedriver_linux64.zip
+
+    - name: Set up ChromeDriver on Windows
+      if: runner.os == 'Windows'
+      run: |
+        $CHROME_VERSION = (Get-Command 'chrome').FileVersionInfo.ProductVersion.Split('.')[0]
+        Invoke-WebRequest -Uri "https://chromedriver.storage.googleapis.com/$CHROME_VERSION.0.0/chromedriver_win32.zip" -OutFile "chromedriver.zip"
+        Expand-Archive -Path "chromedriver.zip" -DestinationPath "."
+        Move-Item -Path ".\chromedriver.exe" -Destination "C:\Program Files\Google\Chrome\Application"
+        Remove-Item -Path "chromedriver.zip"
+
+    - name: Set up ChromeDriver on macOS
+      if: runner.os == 'macOS'
+      run: |
+        CHROME_VERSION=$(google-chrome --version | cut -d " " -f 3 | cut -d "." -f 1)
+        wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}.0.0/chromedriver_mac64.zip
+        unzip chromedriver_mac64.zip
+        sudo mv chromedriver /usr/local/bin/
+        rm chromedriver_mac64.zip
+
     - name: Run Tests
       run: |
         python manage.py test
