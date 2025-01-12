@@ -1,14 +1,14 @@
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
-import chromedriver_autoinstaller
+from selenium.webdriver.chrome.options import Options
 
-chromedriver_autoinstaller.install()
-chrome_options = webdriver.ChromeOptions()
 
 class MyEndToEndTests(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
         cls.driver = webdriver.Chrome(options=chrome_options)
 
     @classmethod
