@@ -49,7 +49,7 @@ class EndToEndCreatePostTests(StaticLiveServerTestCase):
         content_input.send_keys('Este é o conteúdo do meu primeiro post no blog.')
 
         submit_button = self.driver.find_element(By.XPATH, "//button[@type='submit']")
-        submit_button.click()
+        self.driver.execute_script("arguments[0].click();", submit_button)
 
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.XPATH, "//h2[contains(text(), 'Meu Primeiro Post')]"))
